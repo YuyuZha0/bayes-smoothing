@@ -26,11 +26,11 @@ public final class Estimation implements Serializable {
         this.beta = beta;
     }
 
-    public double smoothCtr(Sample data) {
+    public double estimate(Sample data) {
         return (data.getRareEventsCount() + alpha) / (data.getEventsCount() + alpha + beta);
     }
 
-    public double defaultCtr() {
+    public double defaultEstimate() {
         return alpha / (alpha + beta);
     }
 
