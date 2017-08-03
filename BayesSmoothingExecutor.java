@@ -1,5 +1,6 @@
-package default1;
+package com.ifeng.dmp.ctrp.smoothing;
 
+import com.ifeng.dmp.ctrp.immutable.RecordEntry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,7 +18,7 @@ public class BayesSmoothingExecutor {
     private final double epsilon;
     private final double maxAllowedIteration;
 
-    private static final double DELTA_THRESHOLD = 0.001;
+    private static final int WARM_UP_ITERATION = 0xff;
 
     public BayesSmoothingExecutor(double epsilon, double maxAllowedIteration) {
         this.epsilon = epsilon;
@@ -30,22 +31,23 @@ public class BayesSmoothingExecutor {
         double[] value = getInitialValue(entries);
         double[] last = new double[2];
         int i = 0;
-        while (++i < maxAllowedIteration) {
-            double delta = delta(value, last);
+        while (delta(value, last) > epsilon && ++i < maxAllowedIteration) {
             last[0] = value[0];
             last[1] = value[1];
-            if (delta > DELTA_THRESHOLD)
-                nextValue(value, entries);
-            else if (delta > epsilon)
+            if (i > WARM_UP_ITERATION)
                 nextSteffensenValue(value, entries);
-            else break;
+            else nextValue(value, entries);
         }
-        if (i < maxAllowedIteration)
-            logger.info("groupId:{},size:{},point fixed in [{}] iterations,alpha:[{}],beta:[{}].", groupId, data.size(), i, last[0], last[1]);
-        else
-            logger.info("groupId:{},size:{},point unable to fix in max allowed iterations,final alpha:[{}],beta:[{}]", groupId, entries.length, last[0], last[1]);
-        return new BayesSmoothingResult(groupId, last[0], last[1]);
+
+        logger.info("groupId:{},size:{},status:{},iteration:{} ---> alpha:{},beta:{}",
+                groupId,
+                entries.length,
+                i < maxAllowedIteration ? "fixed" : "unfixed",
+                i, value[0], value[1]);
+
+        return new BayesSmoothingResult(groupId, value[0], value[1]);
     }
+
 
     private static double delta(double[] a1, double[] a2) {
         return Math.max(Math.abs(a1[0] - a2[0]),
@@ -54,13 +56,11 @@ public class BayesSmoothingExecutor {
 
     private static double[] getInitialValue(RecordEntry[] entries) {
         int len = entries.length;
-        double ctrSum = 0, ctr2Sum = 0, minCtr = 1, maxCtr = 0;
+        double ctrSum = 0, ctr2Sum = 0;
         for (RecordEntry entry : entries) {
             double ctr = entry.getCtr();
             ctrSum += ctr;
             ctr2Sum += ctr * ctr;
-            minCtr = Math.min(ctr, minCtr);
-            maxCtr = Math.max(ctr, maxCtr);
         }
         double ctrAvg = ctrSum / len;
         double ctrVar = ctr2Sum / len - ctrAvg * ctrAvg;
@@ -102,7 +102,7 @@ public class BayesSmoothingExecutor {
         double b = phiphi - 2 * phi + x;
         if (b == 0)
             return x;
-        //a is very small,do the divide firstly.
+        //保留计算精度
         return x - a * (a / b);
     }
 
