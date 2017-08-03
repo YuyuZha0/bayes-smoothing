@@ -3,9 +3,10 @@
 
   This program implements the algorithm desribed in [http://www.cs.cmu.edu/~xuerui/papers/ctr.pdf]
   
-  The fixed-pointed-iteration was accelerated by Steffensen algorithm.
+  The fixed-pointed-iteration was accelerated by Steffensen method [https://en.wikipedia.org/wiki/Steffensen%27s_method].
+  ![Steffensen method](./steffensen.png)
   
-  Usage:
+  ### Usage:
   
        final BayesSmoothingExecutor executor = new BayesSmoothingExecutor(1e-7, 100000);
         System.out.println("start generating bayes smoothing...");
