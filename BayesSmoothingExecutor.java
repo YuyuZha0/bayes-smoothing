@@ -102,7 +102,8 @@ public class BayesSmoothingExecutor {
         double b = phiphi - 2 * phi + x;
         if (b == 0)
             return x;
-        return x - (a * a) / b;
+        //a is very small,do the divide firstly.
+        return x - a * (a / b);
     }
 
 }
