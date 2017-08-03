@@ -1,6 +1,4 @@
-package com.ifeng.dmp.ctrp.immutable;
-
-import com.ifeng.dmp.ctrp.util.FastStringUtils;
+package default1;
 
 import javax.annotation.concurrent.Immutable;
 import java.io.Serializable;
@@ -69,8 +67,7 @@ public final class RecordEntry implements Serializable {
 
     @Override
     public String toString() {
-        return FastStringUtils.placeholderFormat("{}/{}({})", clickCount, impressionCount,
-                new BigDecimal(ctr).setScale(4, BigDecimal.ROUND_HALF_DOWN));
+        return String.format("%s/%s(%.4f)", clickCount, impressionCount,ctr);
     }
 
     public RecordEntry combine(RecordEntry r) {
