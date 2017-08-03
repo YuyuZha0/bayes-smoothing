@@ -3,7 +3,7 @@
 
   This program implements the algorithm desribed in [http://www.cs.cmu.edu/~xuerui/papers/ctr.pdf]
   
-  The algorithm was accelerated by Steffensen algorithm:
+  The fixed-pointed-iteration was accelerated by Steffensen algorithm.
   
   Usage:
   
