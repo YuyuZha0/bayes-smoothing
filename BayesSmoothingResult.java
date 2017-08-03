@@ -1,7 +1,4 @@
-package com.ifeng.dmp.ctrp.smoothing;
-
-import com.google.common.base.MoreObjects;
-import com.ifeng.dmp.ctrp.immutable.RecordEntry;
+package default;
 
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
