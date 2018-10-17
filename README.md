@@ -25,7 +25,7 @@
                             .collect(Collectors.groupingBy(
                                     CreativeAdUnitRecord::getCreativeId,
                                     Collectors.mapping(CreativeAdUnitRecord::getEntry,
-                                            Collectors.reducing(RecordEntry.of(), RecordEntry::combine))
+                                            Collectors.reducing(RecordEntry.of(), RecordEntry::merge))
                             ))
                             .entrySet()
                             .stream()
