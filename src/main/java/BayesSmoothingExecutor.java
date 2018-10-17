@@ -32,7 +32,7 @@ public class BayesSmoothingExecutor {
       ctr2Sum += ctr * ctr;
     }
     double ctrAvg = ctrSum / len;
-    double ctrVar = getVar(ctr2Sum, ctr2Sum, len);
+    double ctrVar = getVar(ctr2Sum, ctrSum, len);
     double temp1 = (1 - ctrAvg) * ctrAvg / ctrVar - 1;
     double alpha = temp1 * ctrAvg, beta = temp1 * (1 - ctrAvg);
     return new double[] {alpha, beta};
