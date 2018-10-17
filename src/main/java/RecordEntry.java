@@ -44,7 +44,7 @@ public final class RecordEntry implements Serializable {
     return String.format("%s/%s(%.4f)", clickCount, impressionCount, ctr);
   }
 
-  public RecordEntry combine(RecordEntry r) {
+  public RecordEntry merge(RecordEntry r) {
     if (r == null) return this;
     return new RecordEntry(clickCount + r.clickCount, impressionCount + r.impressionCount);
   }
